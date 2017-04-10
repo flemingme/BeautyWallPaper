@@ -1,6 +1,6 @@
 package com.example.fleming.retrofit2demo.api;
 
-import com.example.fleming.retrofit2demo.entity.Meizi;
+import com.example.fleming.retrofit2demo.entity.GirlData;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -14,5 +14,5 @@ import retrofit2.http.Path;
 public interface GankApi {
 
     @GET("/api/data/福利/10/{page}")
-    Observable<Meizi> getMeiziList(@Path("page") int page);
+    Observable<GirlData> getMeiziList(@Path("page") int page);
 }

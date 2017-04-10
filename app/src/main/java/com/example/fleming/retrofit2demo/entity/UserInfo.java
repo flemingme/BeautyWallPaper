@@ -1,45 +1,11 @@
 package com.example.fleming.retrofit2demo.entity;
 
 /**
- * Created by PandaQ on 2017/3/24.
- * github 个人信息类
+ * UserInfo
+ * Created by fleming on 17-4-10.
  */
 
 public class UserInfo {
-
-    /**
-     * login : PandaQAQ
-     * id : 9190439
-     * avatar_url : https://avatars0.githubusercontent.com/u/9190439?v=3
-     * gravatar_id :
-     * url : https://api.github.com/users/PandaQAQ
-     * html_url : https://github.com/PandaQAQ
-     * followers_url : https://api.github.com/users/PandaQAQ/followers
-     * following_url : https://api.github.com/users/PandaQAQ/following{/other_user}
-     * gists_url : https://api.github.com/users/PandaQAQ/gists{/gist_id}
-     * starred_url : https://api.github.com/users/PandaQAQ/starred{/owner}{/repo}
-     * subscriptions_url : https://api.github.com/users/PandaQAQ/subscriptions
-     * organizations_url : https://api.github.com/users/PandaQAQ/orgs
-     * repos_url : https://api.github.com/users/PandaQAQ/repos
-     * events_url : https://api.github.com/users/PandaQAQ/events{/privacy}
-     * received_events_url : https://api.github.com/users/PandaQAQ/received_events
-     * type : User
-     * site_admin : false
-     * name : PandaQ
-     * company : null
-     * blog : http://www.jianshu.com/u/aa53f5d59037
-     * location : nanjing
-     * email : 767807368@qq.com
-     * hireable : null
-     * bio : what？
-     * public_repos : 7
-     * public_gists : 0
-     * followers : 9
-     * following : 6
-     * created_at : 2014-10-13T05:01:41Z
-     * updated_at : 2017-03-23T16:50:42Z
-     */
-
     private String login;
     private int id;
     private String avatar_url;

@@ -1,14 +1,17 @@
 package com.example.fleming.retrofit2demo;
 
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
+import com.example.fleming.retrofit2demo.adapter.MeiziPagerAdapter;
 import com.example.fleming.retrofit2demo.api.ApiManager;
-import com.example.fleming.retrofit2demo.entity.Meizi;
+import com.example.fleming.retrofit2demo.entity.Girl;
+import com.example.fleming.retrofit2demo.entity.GirlData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,7 +20,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String TAG = "chen";
     private ViewPager mViewPager;
+    private List<String> imgUrls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,43 +39,36 @@ public class MainActivity extends AppCompatActivity {
                 .getMeiziList(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Meizi>() {
+                .subscribe(new Observer<GirlData>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        Log.d(TAG, "onSubscribe: " + d.toString());
                     }
 
                     @Override
-                    public void onNext(Meizi value) {
-
+                    public void onNext(GirlData value) {
+                        Log.d(TAG, "onNext: " + value.getResults().size());
+                        for (Girl m : value.getResults()) {
+                            imgUrls.add(m.getUrl());
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d(TAG, "onError: " + e.toString());
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
 
+                        mViewPager.setAdapter(new MeiziPagerAdapter(MainActivity.this, imgUrls));
                     }
                 });
     }
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.vp_meizi);
-
-        mViewPager.setAdapter(new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return 0;
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view == object;
-            }
-        });
     }
 
     private void initEvent() {

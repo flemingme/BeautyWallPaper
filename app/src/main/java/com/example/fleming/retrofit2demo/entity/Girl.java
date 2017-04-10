@@ -1,11 +1,11 @@
 package com.example.fleming.retrofit2demo.entity;
 
 /**
- * Meizi
+ * Girl
  * Created by fleming on 17-4-10.
  */
 
-public class Meizi {
+public class Girl {
 
     /**
      * _id : 58ea5f51421aa954511ebe51
@@ -99,5 +99,20 @@ public class Meizi {
 
     public void setWho(String who) {
         this.who = who;
+    }
+
+    @Override
+    public String toString() {
+        return "Girl{" +
+                "_id='" + _id + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", desc='" + desc + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", source='" + source + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", used=" + used +
+                ", who='" + who + '\'' +
+                '}';
     }
 }

@@ -8,9 +8,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by PandaQ on 2016/9/8.
- * email : 767807368@qq.com
- * 集中处理Api相关配置的Manager类
+ * ApiManager
+ * Created by fleming on 17-4-10.
  */
 public class ApiManager {
 

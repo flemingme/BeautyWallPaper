@@ -1,9 +1,8 @@
 package com.example.fleming.retrofit2demo.api;
 
 /**
- * Created by PandaQ on 2016/9/8.
- * email : 767807368@qq.com
- * 应用配置类，用于配置
+ * Config
+ * Created by fleming on 17-4-10.
  */
 public class Config {
 
