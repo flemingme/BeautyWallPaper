@@ -1,6 +1,6 @@
-package com.example.fleming.retrofit2demo.api;
+package com.example.fleming.beautywallpaper.api;
 
-import com.example.fleming.retrofit2demo.entity.GirlData;
+import com.example.fleming.beautywallpaper.entity.GirlData;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

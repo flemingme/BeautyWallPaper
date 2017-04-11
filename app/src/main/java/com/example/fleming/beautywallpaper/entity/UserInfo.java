@@ -1,4 +1,4 @@
-package com.example.fleming.retrofit2demo.entity;
+package com.example.fleming.beautywallpaper.entity;
 
 /**
  * UserInfo

@@ -1,4 +1,4 @@
-package com.example.fleming.retrofit2demo.api;
+package com.example.fleming.beautywallpaper.api;
 
 /**
  * Config

@@ -1,13 +1,13 @@
-package com.example.fleming.retrofit2demo;
+package com.example.fleming.beautywallpaper;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.fleming.retrofit2demo.adapter.GirlPagerAdapter;
-import com.example.fleming.retrofit2demo.api.ApiManager;
-import com.example.fleming.retrofit2demo.entity.GirlData;
+import com.example.fleming.beautywallpaper.adapter.GirlPagerAdapter;
+import com.example.fleming.beautywallpaper.api.ApiManager;
+import com.example.fleming.beautywallpaper.entity.GirlData;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -48,15 +48,15 @@ public class MainActivity extends AppCompatActivity {
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             Log.d(TAG, "onPageScrolled: position=" + position + ", positionOffset="
                     + positionOffset + ", positionOffsetPixels=" + positionOffsetPixels);
+            if (position == index - 1) {
+                Log.d(TAG, "request next page girl");
+                loadGirls(++mPage);
+            }
         }
 
         @Override
         public void onPageSelected(int position) {
-            int currentItem = mViewPager.getCurrentItem();
-            if (currentItem == index - 1) {
-                Log.d(TAG, "onPageSelected: request next page girl");
-                loadGirls(++mPage);
-            }
+            Log.d(TAG, "onPageSelected: " + position);
         }
 
         @Override

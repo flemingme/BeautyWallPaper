@@ -1,4 +1,4 @@
-package com.example.fleming.retrofit2demo;
+package com.example.fleming.beautywallpaper;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
