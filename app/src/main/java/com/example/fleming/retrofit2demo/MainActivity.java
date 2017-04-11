@@ -5,13 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.fleming.retrofit2demo.adapter.MeiziPagerAdapter;
+import com.example.fleming.retrofit2demo.adapter.GirlPagerAdapter;
 import com.example.fleming.retrofit2demo.api.ApiManager;
-import com.example.fleming.retrofit2demo.entity.Girl;
 import com.example.fleming.retrofit2demo.entity.GirlData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,23 +16,58 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String TAG = "chen";
+    private final String TAG = "fleming";
     private ViewPager mViewPager;
-    private List<String> imgUrls = new ArrayList<>();
+    private int mPage = 1;
+    private int index;
+    private GirlPagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadMeizi();
         initView();
+        loadGirls(mPage);
         initEvent();
     }
 
-    private void loadMeizi() {
+    private void initView() {
+        mViewPager = (ViewPager) findViewById(R.id.vp_girl);
+    }
+
+    private void initEvent() {
+        mAdapter = new GirlPagerAdapter(this);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.addOnPageChangeListener(new GirlPageChangeListener());
+    }
+
+    private class GirlPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            Log.d(TAG, "onPageScrolled: position=" + position + ", positionOffset="
+                    + positionOffset + ", positionOffsetPixels=" + positionOffsetPixels);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            int currentItem = mViewPager.getCurrentItem();
+            if (currentItem == index - 1) {
+                Log.d(TAG, "onPageSelected: request next page girl");
+                loadGirls(++mPage);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            Log.d(TAG, "onPageScrollStateChanged: state=" + state);
+        }
+    }
+
+    private void loadGirls(int pager) {
         ApiManager.getInstence().getGankService()
-                .getMeiziList(1)
+                .getMeiziList(pager)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<GirlData>() {
@@ -48,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(GirlData value) {
                         Log.d(TAG, "onNext: " + value.getResults().size());
-                        for (Girl m : value.getResults()) {
-                            imgUrls.add(m.getUrl());
-                        }
+                        index += value.getResults().size();
+                        mAdapter.setData(value.getResults());
                     }
 
                     @Override
@@ -61,34 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: ");
-
-                        mViewPager.setAdapter(new MeiziPagerAdapter(MainActivity.this, imgUrls));
                     }
                 });
-    }
-
-    private void initView() {
-        mViewPager = (ViewPager) findViewById(R.id.vp_meizi);
-    }
-
-    private void initEvent() {
-
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
     }
 }

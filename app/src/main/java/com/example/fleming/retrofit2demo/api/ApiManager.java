@@ -18,12 +18,7 @@ public class ApiManager {
     private GithubApi mGithubApi;
     private GankApi mGankApi;
     private static ApiManager sApiManager;
-
     private static OkHttpClient mClient;
-
-    private ApiManager() {
-
-    }
 
     public static ApiManager getInstence() {
         if (sApiManager == null) {
@@ -42,6 +37,7 @@ public class ApiManager {
 
     /**
      * 封装 github API
+     * @return GithubApi
      */
     public GithubApi getGithubService() {
         if (mGithubApi == null) {
@@ -56,6 +52,10 @@ public class ApiManager {
         return mGithubApi;
     }
 
+    /**
+     * 封装gank.io API
+     * @return GankApi
+     */
     public GankApi getGankService() {
         if (mGankApi == null) {
             Retrofit retrofit = new Retrofit.Builder()
