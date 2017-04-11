@@ -47,7 +47,7 @@ public class GirlPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.item_girl, container, false);
         final ImageView ivGirl = (ImageView) view.findViewById(R.id.iv_girl);
         Glide.with(mContext)
@@ -58,34 +58,16 @@ public class GirlPagerAdapter extends PagerAdapter {
         ivGirl.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Bitmap bitmap = ((BitmapDrawable) ivGirl.getDrawable()).getBitmap();
-                showSaveDialog(bitmap);
+                if (mListener != null) {
+                    Bitmap bitmap = ((BitmapDrawable) ivGirl.getDrawable()).getBitmap();
+                    mListener.showMenu(bitmap);
+                }
                 return true;
             }
         });
 
         container.addView(view);
         return view;
-    }
-
-    private void showSaveDialog(final Bitmap bitmap) {
-        new AlertDialog.Builder(mContext)
-                .setItems(new CharSequence[]{"设置壁纸"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setWallPaper(bitmap);
-                        Toast.makeText(mContext, "设置成功", Toast.LENGTH_SHORT).show();
-                    }
-                }).show();
-    }
-
-    private void setWallPaper(Bitmap bitmap) {
-        WallpaperManager manager = WallpaperManager.getInstance(mContext);
-        try {
-            manager.setBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -97,4 +79,15 @@ public class GirlPagerAdapter extends PagerAdapter {
         mGirls.addAll(girls);
         notifyDataSetChanged();
     }
+
+    private OnItemListener mListener;
+
+    public void setOnItemListener(OnItemListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnItemListener {
+        void showMenu(Bitmap bitmap);
+    }
+
 }

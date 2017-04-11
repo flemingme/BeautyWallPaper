@@ -15,12 +15,11 @@ public class ApiManager {
 
     private static final int CONNECT_TIMEOUT = 5;
     private static final int READ_TIMEOUT = 10;
-    private GithubApi mGithubApi;
     private GankApi mGankApi;
     private static ApiManager sApiManager;
     private static OkHttpClient mClient;
 
-    public static ApiManager getInstence() {
+    public static ApiManager getInstance() {
         if (sApiManager == null) {
             synchronized (ApiManager.class) {
                 if (sApiManager == null) {
@@ -28,28 +27,14 @@ public class ApiManager {
                 }
             }
         }
+        return sApiManager;
+    }
+
+    private ApiManager() {
         mClient = new OkHttpClient.Builder()
                 .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
                 .build();
-        return sApiManager;
-    }
-
-    /**
-     * 封装 github API
-     * @return GithubApi
-     */
-    public GithubApi getGithubService() {
-        if (mGithubApi == null) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Config.GITHUB_API_URL)
-                    .client(mClient)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            mGithubApi = retrofit.create(GithubApi.class);
-        }
-        return mGithubApi;
     }
 
     /**

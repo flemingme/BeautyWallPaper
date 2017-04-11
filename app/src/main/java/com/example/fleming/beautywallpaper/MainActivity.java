@@ -1,22 +1,36 @@
 package com.example.fleming.beautywallpaper;
 
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.Manifest;
+import android.app.WallpaperManager;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.example.fleming.beautywallpaper.adapter.GirlPagerAdapter;
 import com.example.fleming.beautywallpaper.api.ApiManager;
+import com.example.fleming.beautywallpaper.base.BaseActivity;
 import com.example.fleming.beautywallpaper.entity.GirlData;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements GirlPagerAdapter.OnItemListener {
 
     private final String TAG = "fleming";
+
     private ViewPager mViewPager;
     private int mPage = 1;
     private int index;
@@ -25,11 +39,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, getString(R.string.need_permission));
 
         initView();
-        loadGirls(mPage);
         initEvent();
+
+        loadGirls(mPage);
+    }
+
+    @Override
+    protected int addLayout() {
+        return R.layout.activity_main;
     }
 
     private void initView() {
@@ -40,6 +61,59 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new GirlPagerAdapter(this);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new GirlPageChangeListener());
+        mAdapter.setOnItemListener(this);
+    }
+
+    @Override
+    public void showMenu(final Bitmap bitmap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(R.array.menu_text,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                setWallPaper(bitmap);
+                                toast(getString(R.string.set_suc));
+                                break;
+                            case 1:
+                                saveWallPaper(bitmap);
+                                toast(R.string.save_suc);
+                                break;
+                        }
+                    }
+                });
+        builder.show();
+    }
+
+    private void saveWallPaper(Bitmap bitmap) {
+        String fileName = Calendar.getInstance().getTimeInMillis() + ".jpg";
+        File directory = new File(Environment.getExternalStorageDirectory(), "girls");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        File file = new File(directory, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            fos.write(baos.toByteArray());
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setWallPaper(Bitmap bitmap) {
+        WallpaperManager manager = WallpaperManager.getInstance(this);
+        try {
+            manager.setBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class GirlPageChangeListener implements ViewPager.OnPageChangeListener {
@@ -66,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadGirls(int pager) {
-        ApiManager.getInstence().getGankService()
+        ApiManager.getInstance().getGankService()
                 .getMeiziList(pager)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -94,4 +168,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
