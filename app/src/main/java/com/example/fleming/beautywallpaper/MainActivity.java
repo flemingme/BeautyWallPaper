@@ -17,7 +17,6 @@ import com.example.fleming.beautywallpaper.entity.GirlData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -74,11 +73,9 @@ public class MainActivity extends BaseActivity implements GirlPagerAdapter.OnIte
                         switch (which) {
                             case 0:
                                 setWallPaper(bitmap);
-                                toast(getString(R.string.set_suc));
                                 break;
                             case 1:
                                 saveWallPaper(bitmap);
-                                toast(R.string.save_suc);
                                 break;
                         }
                     }
@@ -93,6 +90,7 @@ public class MainActivity extends BaseActivity implements GirlPagerAdapter.OnIte
             directory.mkdir();
         }
         File file = new File(directory, fileName);
+        Log.d(TAG, "saveWallPaper: " + file.getAbsolutePath());
         try {
             FileOutputStream fos = new FileOutputStream(file);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -100,10 +98,12 @@ public class MainActivity extends BaseActivity implements GirlPagerAdapter.OnIte
             fos.write(baos.toByteArray());
             fos.flush();
             fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (file.exists()) {
+            toast(getString(R.string.save_suc, file.getAbsolutePath()));
         }
     }
 
@@ -114,6 +114,7 @@ public class MainActivity extends BaseActivity implements GirlPagerAdapter.OnIte
         } catch (IOException e) {
             e.printStackTrace();
         }
+        toast(getString(R.string.set_suc));
     }
 
     private class GirlPageChangeListener implements ViewPager.OnPageChangeListener {

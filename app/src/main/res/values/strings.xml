@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">美女壁纸</string>
     <string name="set_suc">设置成功</string>
-    <string name="save_suc">保存成功</string>
+    <string name="save_suc" formatted="true">保存路径%s</string>
     <string name="grant_suc">授权成功</string>
     <string name="need_permission">该应用需要读写SDCard权限,您如果拒绝可能会造成图片存储给你无法使用</string>
     <string-array name="menu_text">
