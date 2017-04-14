@@ -1,23 +1,18 @@
 package com.example.fleming.beautywallpaper.adapter;
 
-import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.fleming.beautywallpaper.R;
 import com.example.fleming.beautywallpaper.entity.Girl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +48,8 @@ public class GirlPagerAdapter extends PagerAdapter {
         Glide.with(mContext)
                 .load(mGirls.get(position).getUrl())
                 .asBitmap()
+                .placeholder(R.drawable.ic_girl)
+                .error(R.drawable.load_error)
                 .into(ivGirl);
 
         ivGirl.setOnLongClickListener(new View.OnLongClickListener() {
